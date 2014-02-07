@@ -14,8 +14,9 @@ require_once __DIR__ . '/db_connect.php';
 $db = new DB_CONNECT();
  
 // get all clients from clients table
-$result = mysql_query("SELECT * FROM agym_record") or die(mysql_error());
- 
+//$result = mysql_query("SELECT * FROM agym_record") or die(mysql_error());
+$result = mysql_query("SELECT id ,names, amount, DATE(date) AS dates, TIME(date) AS time,instructor_id FROM agym_record") or die(mysql_error());
+
 // check for empty result
 if (mysql_num_rows($result) > 0) {
     // looping through all results
@@ -28,7 +29,8 @@ if (mysql_num_rows($result) > 0) {
         $client["cid"] = $row["id"];
         $client["names"] = $row["names"];
         $client["amount"] = $row["amount"];
-        $client["date"] = $row["date"];
+//        $client["date"] = $row["date"];
+        $client["date"] = date('D, j-M-Y',strtotime($row["dates"])).' '.$row["time"];
         $instructor_id = $row["instructor_id"];
 		$sql1=mysql_query("SELECT name FROM agym_instructor where id='$instructor_id'");
 		$client["instructor_name"] = mysql_result($sql1,0,0);	
